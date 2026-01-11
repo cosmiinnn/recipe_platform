@@ -43,7 +43,8 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4">
+    // FIX: Am adăugat bg-gray-50 dark:bg-gray-900 transition-colors duration-200
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       {/* Card: corectat background-ul */}
       <div className="max-w-md w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 border border-transparent dark:border-gray-700">
         

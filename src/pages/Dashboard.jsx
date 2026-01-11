@@ -40,21 +40,20 @@ export default function Dashboard() {
     }
   }, [currentUser]);
 
+  // FIX: Am adăugat clasele de background și pe ecranul de Loading
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[60vh]">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex justify-center items-center transition-colors duration-200">
         <FiLoader className="animate-spin text-orange-600 text-4xl" />
       </div>
     );
   }
 
   return (
-    // Dark: bg-gray-900
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-12 transition-colors duration-200">
       <div className="max-w-6xl mx-auto px-4 py-8">
         
         {/* HEADER & STATS */}
-        {/* Dark: bg-gray-800 border-gray-700 */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 mb-8 flex flex-col md:flex-row justify-between items-center gap-4 transition-colors">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white">My Chef Dashboard</h1>
@@ -85,10 +84,8 @@ export default function Dashboard() {
           </div>
         ) : (
           /* Empty State */
-          // Dark: bg-gray-800 border-gray-700
           <div className="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             
-            {/* Icon Circle: Dark uses transparent blue */}
             <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-full mb-4 transition-colors">
               <FiBookOpen className="text-blue-400 dark:text-blue-300 text-4xl" />
             </div>
@@ -100,7 +97,6 @@ export default function Dashboard() {
             
             <Link 
               to="/create-recipe" 
-              // Button: Light uses orange-100 | Dark uses orange-900 with transparency
               className="flex items-center gap-2 bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300 px-6 py-3 rounded-lg hover:bg-orange-200 dark:hover:bg-orange-900/50 transition font-medium"
             >
               <FiPlusSquare /> Start Creating
