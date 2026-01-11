@@ -1,16 +1,113 @@
-# React + Vite
+# 🍊 ZestyChef
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-%23039BE5.svg?style=for-the-badge&logo=firebase)
+![Vite](https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white)
+![Netlify](https://img.shields.io/badge/netlify-%2300C7B7.svg?style=for-the-badge&logo=netlify&logoColor=white)
 
-Currently, two official plugins are available:
+**ZestyChef** is a modern, social culinary platform designed for food enthusiasts to share, discover, and manage their favorite recipes. Built with a serverless architecture using **React** and **Firebase**, it offers a seamless and responsive user experience with features like dark mode, real-time updates, and advanced filtering.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 **Live Demo:** [Click here to visit ZestyChef](https://zestychef.netlify.app/)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📸 Screenshots
 
-## Expanding the ESLint configuration
+![App Screenshot](public/screenshot.png)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ✨ Key Features
+
+### 🍳 Recipe Management
+-   **Create & Edit:** Users can publish their own recipes with ingredients, steps, cooking time, and image uploads.
+-   **Rich Details:** Comprehensive recipe views including difficulty levels, categories, and vegetarian tags.
+-   **Dashboard:** A private area to manage published content.
+
+### 🔍 Discovery & Navigation
+-   **Advanced Filtering:** Filter by Category (Breakfast, Lunch, etc.) and Difficulty.
+-   **Smart Search:** Real-time search by recipe title or ingredients.
+-   **Sorting:** Sort by Newest, Oldest, or Most Popular.
+-   **Pagination:** "Load More" functionality for optimized performance.
+
+### 👤 User Experience
+-   **Authentication:** Secure Login and Registration powered by Firebase Auth.
+-   **Social Interactions:** Like recipes and see real-time counters.
+-   **Favorites:** Save recipes to a personal "Favorites" collection.
+-   **Dark Mode:** Fully supported system-wide dark/light theme toggle.
+-   **Responsive Design:** Mobile-first approach using Tailwind CSS.
+
+---
+
+## 🛠️ Tech Stack
+
+-   **Frontend:** React 18, Vite
+-   **Styling:** Tailwind CSS
+-   **Backend-as-a-Service:** Firebase (Authentication, Firestore Database, Storage)
+-   **Routing:** React Router DOM
+-   **Notifications:** React Hot Toast
+-   **Icons:** React Icons
+-   **Deployment:** Netlify
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run the project locally on your machine.
+
+### Prerequisites
+-   Node.js (v14 or higher)
+-   npm or yarn
+
+### Installation
+
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/cosmiinnn/recipe_platform.git
+    cd ZestyChef
+    ```
+
+2.  **Install dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Configure Firebase**
+    -   Create a project at [Firebase Console](https://console.firebase.google.com/).
+    -   Enable **Authentication** (Email/Password).
+    -   Enable **Firestore Database**.
+    -   Enable **Storage**.
+    -   Get your web configuration keys.
+
+4.  **Setup Environment Variables**
+    -   Create a `.env` file in the root directory.
+    -   Add your Firebase config keys as follows:
+
+    ```env
+    VITE_API_KEY=your_api_key
+    VITE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+    VITE_PROJECT_ID=your_project_id
+    VITE_STORAGE_BUCKET=your_project_id.appspot.com
+    VITE_MESSAGING_SENDER_ID=your_sender_id
+    VITE_APP_ID=your_app_id
+    VITE_MEASUREMENT_ID=your_measurement_id
+    ```
+
+5.  **Run the App**
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 📂 Project Structure
+
+```text
+src/
+├── components/       # Reusable UI components (Navbar, RecipeCard)
+├── context/          # React Contexts (Auth, Theme, Favorites)
+├── pages/            # Page components (Home, Login, Dashboard, etc.)
+├── firebase.js       # Firebase configuration
+├── main.jsx          # Entry point
+└── App.jsx           # Main routing layout
