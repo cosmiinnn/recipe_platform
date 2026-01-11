@@ -12,10 +12,13 @@ export default function Home() {
   const [selectedCategories, setSelectedCategories] = useState([]); 
   const [selectedDifficulties, setSelectedDifficulties] = useState([]);
   
+  // 1. STATE NOU PENTRU VEGETARIAN
+  const [isVegetarian, setIsVegetarian] = useState(false);
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOption, setSortOption] = useState('newest');
 
-  // --- STATE NOU PENTRU PAGINARE ---
+  // --- STATE PENTRU PAGINARE ---
   const [visibleCount, setVisibleCount] = useState(6);
   const RECIPES_PER_PAGE = 6;
 
@@ -43,12 +46,13 @@ export default function Home() {
   // --- RESETARE PAGINARE LA FILTRARE ---
   useEffect(() => {
     setVisibleCount(RECIPES_PER_PAGE);
-  }, [searchTerm, selectedCategories, selectedDifficulties, sortOption]);
+  }, [searchTerm, selectedCategories, selectedDifficulties, isVegetarian, sortOption]);
 
   // --- LOGICA DE TOGGLE ---
   const handleResetFilters = () => {
     setSelectedCategories([]);
     setSelectedDifficulties([]);
+    setIsVegetarian(false); // Resetăm și vegetarian
     setSearchTerm('');
     setVisibleCount(RECIPES_PER_PAGE);
   };
@@ -74,15 +78,19 @@ export default function Home() {
   };
 
   // --- LOGICA COMBINATĂ ---
-  // 1. Filtrăm și Sortăm TOATE rețetele (Variabila redenumită)
   const filteredAndSortedRecipes = recipes
     .filter(recipe => {
       const matchesSearch = recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             recipe.ingredients.some(ing => ing.toLowerCase().includes(searchTerm.toLowerCase()));
+      
       const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(recipe.category);
       const matchesDifficulty = selectedDifficulties.length === 0 || selectedDifficulties.includes(recipe.difficulty);
+      
+      // 2. FILTRARE VEGETARIAN
+      // Dacă filtrul e activ, rețeta trebuie să fie vegetariană. Dacă nu e activ, acceptăm orice.
+      const matchesVegetarian = isVegetarian ? recipe.isVegetarian === true : true;
 
-      return matchesSearch && matchesCategory && matchesDifficulty;
+      return matchesSearch && matchesCategory && matchesDifficulty && matchesVegetarian;
     })
     .sort((a, b) => {
       if (sortOption === 'newest') return (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0);
@@ -91,14 +99,14 @@ export default function Home() {
       return 0;
     });
 
-  // 2. PAGINAREA VIZUALĂ (Slicing)
   const visibleRecipes = filteredAndSortedRecipes.slice(0, visibleCount);
-  
   const hasMoreRecipes = visibleCount < filteredAndSortedRecipes.length;
 
   const categoriesList = ['Breakfast', 'Lunch', 'Dinner', 'Dessert', 'Snack'];
   const difficultiesList = ['Easy', 'Medium', 'Hard'];
-  const isAllSelected = selectedCategories.length === 0 && selectedDifficulties.length === 0 && searchTerm === '';
+  
+  // Verificăm dacă vreun filtru este activ
+  const isAllSelected = selectedCategories.length === 0 && selectedDifficulties.length === 0 && !isVegetarian && searchTerm === '';
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-12 transition-colors duration-200">
@@ -139,6 +147,7 @@ export default function Home() {
           {/* ZONA DE FILTRE (Grupate) */}
           <div className="flex flex-wrap gap-3 justify-center items-center">
             
+            {/* Butonul ALL */}
             <button
               onClick={handleResetFilters}
               className={`px-5 py-2 rounded-full text-sm font-bold transition border shadow-sm
@@ -149,8 +158,8 @@ export default function Home() {
               All
             </button>
 
+            {/* CATEGORIES */}
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-1 hidden sm:block"></div>
-
             <div className="flex flex-wrap gap-2 justify-center">
               {categoriesList.map((cat) => {
                 const isActive = selectedCategories.includes(cat);
@@ -170,8 +179,8 @@ export default function Home() {
               })}
             </div>
 
+            {/* DIFFICULTIES */}
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-1 hidden sm:block"></div>
-
             <div className="flex flex-wrap gap-2 justify-center">
               {difficultiesList.map((diff) => {
                 const isActive = selectedDifficulties.includes(diff);
@@ -194,6 +203,19 @@ export default function Home() {
                 );
               })}
             </div>
+
+            {/* 3. VEGETARIAN TOGGLE */}
+            <div className="h-6 w-px bg-gray-300 dark:bg-gray-700 mx-1 hidden sm:block"></div>
+            <button
+              onClick={() => setIsVegetarian(!isVegetarian)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition border flex items-center gap-1.5
+                ${isVegetarian
+                  ? 'bg-green-100 text-green-700 border-green-300 shadow-sm dark:bg-green-900/40 dark:text-green-300 dark:border-green-700' 
+                  : 'bg-white text-gray-600 hover:bg-gray-100 border-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 dark:hover:bg-gray-700'}`}
+            >
+              {isVegetarian && <FiCheck size={14} />}
+              Vegetarian 🌿
+            </button>
 
           </div>
 
@@ -224,16 +246,14 @@ export default function Home() {
           <div className="flex justify-center items-center py-20">
             <FiLoader className="animate-spin text-orange-600 text-4xl" />
           </div>
-        ) : filteredAndSortedRecipes.length > 0 ? ( // <--- AICI ERA PROBLEMA (Am corectat)
+        ) : filteredAndSortedRecipes.length > 0 ? (
           <>
-            {/* LISTA DE REȚETE VIZIBILE */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {visibleRecipes.map(recipe => (
                 <RecipeCard key={recipe.id} recipe={recipe} />
               ))}
             </div>
 
-            {/* BUTONUL LOAD MORE */}
             {hasMoreRecipes && (
               <div className="flex justify-center mt-12">
                 <button
