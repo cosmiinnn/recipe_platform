@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 transition-colors duration-200;
+  }
+  
+  /* Când clasa 'dark' este activă pe HTML, aplică stilurile astea pe body */
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
