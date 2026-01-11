@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { doc, getDoc, deleteDoc, updateDoc, arrayUnion, arrayRemove, increment } from 'firebase/firestore';
-import { db } from '../firebase';
+import { ref, deleteObject } from 'firebase/storage'; 
+import { db, storage } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { useFavorites } from '../context/FavoritesContext';
 import { toast } from 'react-hot-toast';
@@ -15,11 +16,9 @@ export default function RecipeDetails() {
   const { currentUser } = useAuth();
   const { isFavorite, addToFavorites, removeFromFavorites } = useFavorites();
   
-  // 1. DEFINIREA STATE-URILOR PRINCIPALE
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 2. DEFINIREA STATE-URILOR PENTRU LIKE
   const [likeCount, setLikeCount] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
@@ -27,7 +26,7 @@ export default function RecipeDetails() {
   // Check if this recipe is already in favorites
   const isFav = isFavorite(id);
 
-  // 3. FETCH RECIPE DATA
+  // FETCH RECIPE DATA
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -113,7 +112,16 @@ export default function RecipeDetails() {
     if (!window.confirm("Are you sure you want to delete this recipe? This action cannot be undone.")) return;
 
     try {
+      if (recipe.imageUrl) {
+        const imageRef = ref(storage, recipe.imageUrl);
+        
+        await deleteObject(imageRef).catch((error) => {
+           console.warn("Image not found in storage, skipping image deletion:", error);
+        });
+      }
+
       await deleteDoc(doc(db, 'recipes', id));
+      
       toast.success("Recipe deleted successfully.");
       navigate('/');
     } catch (error) {
